@@ -42,6 +42,73 @@
 
 ---
 
+## 주요 화면
+
+### 1. API 엔드포인트 (Swagger UI)
+![Swagger UI](images/01_swagger_ui_endpoints.png)
+FastAPI로 구현한 엔드포인트 목록입니다. `/api/analyze`, `/api/resume`, `/api/match`, `/api/cover-letter`, `/api/agent/run` 총 5개의 API를 설계했습니다.
+
+---
+
+### 2. 이력서 PDF 파싱
+![Resume Upload](images/02_resume_upload_test.png)
+PyMuPDF로 PDF에서 텍스트를 추출합니다. 한글 이력서도 정상적으로 파싱됩니다.
+
+---
+
+### 3. 이력서 매칭 결과 (Swagger UI)
+![Match Result](images/03_match_result.png)
+채용공고와 이력서를 비교해서 매칭 스킬, 부족한 스킬, 점수를 반환합니다.
+
+> 💡 **매칭 점수 일관성 이슈**
+> 동일한 이력서와 공고로 테스트했을 때 67점과 33점이 각각 나왔습니다. `temperature=0`으로 설정했음에도 GPT가 크롤링된 공고 텍스트를 매번 조금씩 다르게 해석하기 때문입니다. 이는 입력 텍스트의 노이즈(메뉴, 광고 등 불필요한 HTML 잔재)가 원인일 가능성이 높습니다. v2에서 텍스트 전처리를 강화하고 정량 평가 지표를 추가해서 개선할 예정입니다.
+
+---
+
+### 4. 자소서 생성 결과 (Swagger UI)
+![Cover Letter](images/04_cover_letter_result.png)
+지원동기, 직무 관련 경험, 입사 후 포부를 자동 생성합니다.
+> 💡 **자소서 길이 설정**
+> 현재 자소서 초안은 테스트 목적으로 200자 내외로 설정했습니다. v2에서 500자 이상으로 늘리고 사용자가 직접 포맷을 입력하면 그에 맞게 초안을 작성하는 커스터마이징 기능을 추가할 예정입니다.
+---
+
+### 5. LangGraph Agent 실행 결과
+![Agent Run](images/05_agent_run_result.png)
+`/api/agent/run` 하나로 크롤링 → 분석 → 매칭 → 자소서 생성까지 전체 파이프라인이 자동 실행됩니다.
+
+---
+
+### 6. Streamlit UI 초기 화면
+![Streamlit UI](images/06_streamlit_ui.png)
+3개 탭으로 구성된 Streamlit 인터페이스입니다.
+
+---
+
+### 7. 공고 분석 결과
+![Analyze](images/07_streamlit_analyze.png)
+채용공고 URL만 입력하면 회사, 직무, 필수 스킬, 우대사항을 자동으로 추출합니다.
+
+---
+
+### 8. 이력서 매칭 결과
+![Match](images/08_streamlit_match.png)
+이력서 PDF를 업로드하면 공고와 비교해서 매칭 점수와 갭 분석 결과를 보여줍니다.
+
+
+---
+
+### 9. 자소서 생성 결과
+![Cover Letter](images/09_streamlit_cover_letter.png)
+공고와 이력서를 분석해서 자소서 초안 3개 항목을 자동 생성합니다.
+
+---
+
+### 10. 배포 화면
+![Deployed](images/10_streamlit_deployed.png)
+Streamlit Cloud에 배포된 서비스입니다.
+
+---
+
 ## 개발 과정
 
 ### v1 — FastAPI 백엔드 + 핵심 기능 구현
@@ -90,7 +157,6 @@ job-agent/
 └── requirements.txt
 ```
 
-
 ---
 
 ## 설치 및 실행
@@ -120,7 +186,7 @@ ShopAI는 질문이 들어오면 검색하고 답변하는 단순 반복 구조�
 FastAPI와 Streamlit을 분리했을 때 로컬에서는 잘 동작했지만, Streamlit Cloud 배포 시 백엔드를 띄울 수 없는 문제가 생겼습니다. 처음부터 배포 환경을 고려하고 아키텍처를 설계해야 한다는 점을 배웠습니다.
 
 **매칭 점수 일관성 문제**
-같은 입력에도 매칭 점수가 매번 다르게 나오는 문제를 발견했습니다. temperature=0으로 설정했음에도 GPT가 공고 텍스트를 매번 조금씩 다르게 해석하기 때문입니다. 이는 v2에서 정량 평가 지표를 추가해서 개선할 예정입니다.
+같은 입력에도 매칭 점수가 33점과 67점으로 다르게 나오는 문제를 발견했습니다. `temperature=0`으로 설정했음에도 크롤링 텍스트에 남아있는 HTML 잔재(메뉴, 광고 등 노이즈)가 GPT의 해석에 영향을 주기 때문입니다. 단순히 모델 파라미터 문제가 아니라 입력 데이터 품질이 결과에 직접 영향을 준다는 점을 수치로 확인했습니다. v2에서 텍스트 전처리 강화와 정량 평가 지표 추가로 개선할 예정입니다.
 
 ---
 
@@ -130,6 +196,7 @@ FastAPI와 Streamlit을 분리했을 때 로컬에서는 잘 동작했지만, St
 - 결과 기반 AI 상담 채팅 기능
 - 자소서 길이 및 포맷 커스터마이징
 - 프롬프트 실험 및 비교 결과
+- 텍스트 전처리 강화
 - 매칭 점수 정량 평가
 
 ---
