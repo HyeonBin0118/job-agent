@@ -9,10 +9,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# 로컬은 .env, Streamlit Cloud는 st.secrets에서 읽기
-api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
-client = OpenAI(api_key=api_key)
 
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    try:
+        api_key = st.secrets["OPENAI_API_KEY"]
+    except Exception:
+        pass
+client = OpenAI(api_key=api_key)
 
 def crawl_job_posting(url: str) -> str:
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
