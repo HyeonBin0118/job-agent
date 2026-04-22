@@ -4,10 +4,14 @@ from bs4 import BeautifulSoup
 from openai import OpenAI
 import fitz
 import json
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
-client = OpenAI()
+
+# 로컬은 .env, Streamlit Cloud는 st.secrets에서 읽기
+api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key)
 
 
 def crawl_job_posting(url: str) -> str:

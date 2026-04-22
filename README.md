@@ -3,7 +3,10 @@
 > LangGraph 기반 채용공고 분석 · 이력서 매칭 · 자소서 생성 자동화 서비스
 
 🚀 라이브 데모: https://job-agent-fiyd3jcmzx92at9t7p7zq2.streamlit.app/
-
+> ⚠️ **배포 이슈 수정 (2026.04.22)**
+> 배포 후 라이브 데모 접속 시 `OPENAI_API_KEY` 환경변수를 읽지 못하는 문제가 발생했습니다.
+> 로컬에서는 `.env`로 동작하지만 Streamlit Cloud는 `st.secrets`로 읽어야 하는 차이 때문이었습니다.
+> `os.getenv()` → `st.secrets` 폴백 방식으로 수정하여 해결했습니다.
 ---
 
 ## 프로젝트 개요
