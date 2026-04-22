@@ -67,6 +67,8 @@ ShopAI에서 LangChain으로 RAG 파이프라인을 구성했다면, 이번엔 L
 ---
 
 ## 프로젝트 구조
+
+```
 job-agent/
 ├── app/
 │   ├── main.py              # FastAPI 앱
@@ -86,6 +88,7 @@ job-agent/
 │   └── app.py               # Streamlit UI
 ├── images/                  # 스크린샷
 └── requirements.txt
+```
 
 
 ---
