@@ -217,3 +217,5 @@ Streamlit Cloud 서버 IP가 잡코리아에서 차단되어 배포 환경에서
 - 매칭 점수 정량 평가
 
 ---
+
+*다음 버전: [Job Agent v2](https://github.com/HyeonBin0118/job-agent-v2)*
